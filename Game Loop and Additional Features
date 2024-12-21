@@ -1,0 +1,38 @@
+class RPG:
+    def __init__(self):
+        self.character = None
+        self.enemies = []
+        self.inventory = Inventory()
+
+    def create_character(self):
+        name = input("Enter your character's name: ")
+        self.character = Character(name, 100, 20, 10)
+
+    def add_enemy(self, name, hp, attack, defense):
+        self.enemies.append(Enemy(name, hp, attack, defense))
+
+    def game_loop(self):
+        self.create_character()
+        self.add_enemy("Goblin", 50, 15, 5)
+        self.add_enemy("Orc", 80, 25, 10)
+        self.add_enemy("Dragon", 150, 40, 20)
+
+        while self.character.is_alive() and self.enemies:
+            enemy = self.enemies.pop(0)
+            battle(self.character, enemy)
+
+            if self.character.is_alive():
+                print("You have leveled up!")
+                self.character.hp += 20
+                self.character.attack += 5
+                self.character.defense += 5
+
+        if self.character.is_alive():
+            print("Congratulations! You have defeated all enemies.")
+        else:
+            print("Game Over.")
+
+# Start the game
+if __name__ == "__main__":
+    game = RPG()
+    game.game_loop()
