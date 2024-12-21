@@ -1,0 +1,76 @@
+void useItem(Character *character, Item *item) {
+    if (strcmp(item->effect, "heal") == 0) {
+        character->hp += item->amount;
+        printf("%s healed for %d HP.\n", character->name, item->amount);
+    } else if (strcmp(item->effect, "boost_attack") == 0) {
+        character->attack += item->amount;
+        printf("%s's attack increased by %d.\n", character->name, item->amount);
+    } else if (strcmp(item->effect, "boost_defense") == 0) {
+        character->defense += item->amount;
+        printf("%s's defense increased by %d.\n", character->name, item->amount);
+    }
+}
+
+void printInventory(Inventory *inventory) {
+    if (inventory->itemCount == 0) {
+        printf("Inventory is empty.\n");
+        return;
+    }
+    printf("Inventory:\n");
+    for (int i = 0; i < inventory->itemCount; i++) {
+        printf("%s - %s (%d)\n", inventory->items[i].name, inventory->items[i].effect, inventory->items[i].amount);
+    }
+}
+
+void battle(Character *character, Enemy *enemy, Inventory *inventory) {
+    printf("A wild %s appears!\n", enemy->name);
+    while (character->hp > 0 && enemy->hp > 0) {
+        printf("%s HP: %d\n", character->name, character->hp);
+        printf("%s HP: %d\n", enemy->name, enemy->hp);
+
+        printf("Choose an action (1: attack, 2: defend, 3: use item): ");
+        int action;
+        scanf("%d", &action);
+
+        if (action == 1) {
+            int damage = character->attack - enemy->defense;
+            if (damage < 0) damage = 0;
+            enemy->hp -= damage;
+            printf("%s dealt %d damage to %s.\n", character->name, damage, enemy->name);
+        } else if (action == 2) {
+            printf("%s is defending.\n", character->name);
+        } else if (action == 3) {
+            printInventory(inventory);
+            printf("Enter item name to use: ");
+            char itemName[MAX_NAME_LENGTH];
+            scanf("%s", itemName);
+
+            for (int i = 0; i < inventory->itemCount; i++) {
+                if (strcmp(inventory->items[i].name, itemName) == 0) {
+                    useItem(character, &inventory->items[i]);
+                    for (int j = i; j < inventory->itemCount - 1; j++) {
+                        inventory->items[j] = inventory->items[j + 1];
+                    }
+                    inventory->itemCount--;
+                    break;
+                }
+            }
+        } else {
+            printf("Invalid action. Try again.\n");
+            continue;
+        }
+
+        if (enemy->hp > 0) {
+            int damage = enemy->attack - character->defense;
+            if (damage < 0) damage = 0;
+            character->hp -= damage;
+            printf("%s dealt %d damage to %s.\n", enemy->name, damage, character->name);
+        }
+    }
+
+    if (character->hp > 0) {
+        printf("%s defeated %s!\n", character->name, enemy->name);
+    } else {
+        printf("%s was defeated by %s.\n", character->name, enemy->name);
+    }
+}
