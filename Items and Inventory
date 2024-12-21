@@ -1,0 +1,39 @@
+class Item:
+    def __init__(self, name, effect, amount):
+        self.name = name
+        self.effect = effect
+        self.amount = amount
+
+    def use(self, character):
+        if self.effect == "heal":
+            character.hp += self.amount
+            print(f"{character.name} healed for {self.amount} HP.")
+        elif self.effect == "boost_attack":
+            character.attack += self.amount
+            print(f"{character.name}'s attack increased by {self.amount}.")
+        elif self.effect == "boost_defense":
+            character.defense += self.amount
+            print(f"{character.name}'s defense increased by {self.amount}.")
+
+class Inventory:
+    def __init__(self):
+        self.items = []
+
+    def add_item(self, item):
+        self.items.append(item)
+
+    def use_item(self, item_name, character):
+        for item in self.items:
+            if item.name == item_name:
+                item.use(character)
+                self.items.remove(item)
+                return True
+        return False
+
+    def show_inventory(self):
+        if not self.items:
+            print("Inventory is empty.")
+            return
+        print("Inventory:")
+        for item in self.items:
+            print(f"{item.name} - {item.effect} ({item.amount})")
