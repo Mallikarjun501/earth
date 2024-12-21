@@ -1,0 +1,42 @@
+void levelUp(Character *character) {
+    character->hp += 20;
+    character->attack += 5;
+    character->defense += 5;
+    printf("%s has leveled up!\n", character->name);
+}
+
+int main() {
+    Character hero;
+    Inventory inventory = { .itemCount = 0 };
+    Enemy enemies[MAX_ENEMIES];
+    int enemyCount = 0;
+
+    printf("Enter your character's name: ");
+    char heroName[MAX_NAME_LENGTH];
+    scanf("%s", heroName);
+    initCharacter(&hero, heroName, 100, 20, 10);
+
+    addItem(&inventory, "Health Potion", "heal", 20);
+    addItem(&inventory, "Attack Boost", "boost_attack", 5);
+    addItem(&inventory, "Defense Boost", "boost_defense", 5);
+
+    initEnemy(&enemies[enemyCount++], "Goblin", 50, 15, 5);
+    initEnemy(&enemies[enemyCount++], "Orc", 80, 25, 10);
+    initEnemy(&enemies[enemyCount++], "Dragon", 150, 40, 20);
+
+    for (int i = 0; i < enemyCount; i++) {
+        if (hero.hp <= 0) break;
+        battle(&hero, &enemies[i], &inventory);
+        if (hero.hp > 0) {
+            levelUp(&hero);
+        }
+    }
+
+    if (hero.hp > 0) {
+        printf("Congratulations! You have defeated all enemies.\n");
+    } else {
+        printf("Game Over.\n");
+    }
+
+    return 0;
+}
