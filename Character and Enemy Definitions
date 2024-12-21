@@ -1,0 +1,45 @@
+import random
+
+class Character:
+    def __init__(self, name, hp, attack, defense):
+        self.name = name
+        self.hp = hp
+        self.attack = attack
+        self.defense = defense
+
+    def is_alive(self):
+        return self.hp > 0
+
+    def take_damage(self, damage):
+        self.hp -= damage
+        if self.hp < 0:
+            self.hp = 0
+
+    def deal_damage(self, enemy):
+        damage = self.attack - enemy.defense
+        if damage < 0:
+            damage = 0
+        enemy.take_damage(damage)
+        return damage
+
+class Enemy:
+    def __init__(self, name, hp, attack, defense):
+        self.name = name
+        self.hp = hp
+        self.attack = attack
+        self.defense = defense
+
+    def is_alive(self):
+        return self.hp > 0
+
+    def take_damage(self, damage):
+        self.hp -= damage
+        if self.hp < 0:
+            self.hp = 0
+
+    def deal_damage(self, character):
+        damage = self.attack - character.defense
+        if damage < 0:
+            damage = 0
+        character.take_damage(damage)
+        return damage
