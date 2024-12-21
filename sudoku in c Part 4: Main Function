@@ -1,0 +1,20 @@
+int main() {
+    int grid[SIZE][SIZE] = {0};
+    int k = 20; // Number of cells to remove to create a puzzle
+
+    srand(time(0));
+
+    generateSudoku(grid, k);
+
+    printf("Generated Sudoku Puzzle:\n");
+    printGrid(grid);
+
+    if (solveSudoku(grid)) {
+        printf("\nSolved Sudoku Puzzle:\n");
+        printGrid(grid);
+    } else {
+        printf("\nNo solution exists.\n");
+    }
+
+    return 0;
+}
