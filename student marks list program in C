@@ -1,0 +1,60 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_STUDENTS 100
+#define MAX_SUBJECTS 5
+
+typedef struct {
+    char name[50];
+    int rollNo;
+    float marks[MAX_SUBJECTS];
+    float total;
+    float percentage;
+} Student;
+
+void inputStudentDetails(Student *student, int numSubjects) {
+    printf("Enter student name: ");
+    scanf(" %[^\n]", student->name);
+    printf("Enter roll number: ");
+    scanf("%d", &student->rollNo);
+    
+    student->total = 0;
+    for (int i = 0; i < numSubjects; i++) {
+        printf("Enter marks for subject %d: ", i + 1);
+        scanf("%f", &student->marks[i]);
+        student->total += student->marks[i];
+    }
+    student->percentage = student->total / numSubjects;
+}
+
+void displayStudentDetails(Student *student, int numSubjects) {
+    printf("\nName: %s\n", student->name);
+    printf("Roll No: %d\n", student->rollNo);
+    for (int i = 0; i < numSubjects; i++) {
+        printf("Marks for subject %d: %.2f\n", i + 1, student->marks[i]);
+    }
+    printf("Total: %.2f\n", student->total);
+    printf("Percentage: %.2f%%\n", student->percentage);
+}
+
+int main() {
+    int numStudents, numSubjects;
+    Student students[MAX_STUDENTS];
+
+    printf("Enter number of students: ");
+    scanf("%d", &numStudents);
+    printf("Enter number of subjects: ");
+    scanf("%d", &numSubjects);
+
+    for (int i = 0; i < numStudents; i++) {
+        printf("\nEntering details for student %d:\n", i + 1);
+        inputStudentDetails(&students[i], numSubjects);
+    }
+
+    printf("\nStudent Marks List:\n");
+    for (int i = 0; i < numStudents; i++) {
+        displayStudentDetails(&students[i], numSubjects);
+    }
+
+    return 0;
+}
