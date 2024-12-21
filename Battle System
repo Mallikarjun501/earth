@@ -1,0 +1,36 @@
+def battle(character, enemy):
+    print(f"A wild {enemy.name} appears!")
+    while character.is_alive() and enemy.is_alive():
+        print(f"{character.name} HP: {character.hp}")
+        print(f"{enemy.name} HP: {enemy.hp}")
+
+        action = input("Choose an action (attack, defend, use item): ").lower()
+        if action == "attack":
+            damage = character.deal_damage(enemy)
+            print(f"{character.name} dealt {damage} damage to {enemy.name}.")
+        elif action == "defend":
+            print(f"{character.name} is defending.")
+        elif action == "use item":
+            item_name = input("Enter item name to use: ")
+            if not character.inventory.use_item(item_name, character):
+                print("Item not found in inventory.")
+        else:
+            print("Invalid action. Try again.")
+
+        if enemy.is_alive():
+            damage = enemy.deal_damage(character)
+            print(f"{enemy.name} dealt {damage} damage to {character.name}.")
+
+    if character.is_alive():
+        print(f"{character.name} defeated {enemy.name}!")
+    else:
+        print(f"{character.name} was defeated by {enemy.name}.")
+
+# Sample usage:
+hero = Character("Hero", 100, 20, 10)
+goblin = Enemy("Goblin", 50, 15, 5)
+potion = Item("Health Potion", "heal", 20)
+hero.inventory = Inventory()
+hero.inventory.add_item(potion)
+
+battle(hero, goblin)
