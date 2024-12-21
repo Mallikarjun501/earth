@@ -1,0 +1,55 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define MAX_NAME_LENGTH 50
+#define MAX_INVENTORY 10
+#define MAX_ENEMIES 10
+
+typedef struct {
+    char name[MAX_NAME_LENGTH];
+    int hp;
+    int attack;
+    int defense;
+} Character;
+
+typedef struct {
+    char name[MAX_NAME_LENGTH];
+    int hp;
+    int attack;
+    int defense;
+} Enemy;
+
+typedef struct {
+    char name[MAX_NAME_LENGTH];
+    char effect[MAX_NAME_LENGTH];
+    int amount;
+} Item;
+
+typedef struct {
+    Item items[MAX_INVENTORY];
+    int itemCount;
+} Inventory;
+
+void initCharacter(Character *character, const char *name, int hp, int attack, int defense) {
+    strncpy(character->name, name, MAX_NAME_LENGTH);
+    character->hp = hp;
+    character->attack = attack;
+    character->defense = defense;
+}
+
+void initEnemy(Enemy *enemy, const char *name, int hp, int attack, int defense) {
+    strncpy(enemy->name, name, MAX_NAME_LENGTH);
+    enemy->hp = hp;
+    enemy->attack = attack;
+    enemy->defense = defense;
+}
+
+void addItem(Inventory *inventory, const char *name, const char *effect, int amount) {
+    if (inventory->itemCount < MAX_INVENTORY) {
+        strncpy(inventory->items[inventory->itemCount].name, name, MAX_NAME_LENGTH);
+        strncpy(inventory->items[inventory->itemCount].effect, effect, MAX_NAME_LENGTH);
+        inventory->items[inventory->itemCount].amount = amount;
+        inventory->itemCount++;
+    }
+}
