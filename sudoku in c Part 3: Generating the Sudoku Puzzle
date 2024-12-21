@@ -1,0 +1,67 @@
+void fillDiagonal(int grid[SIZE][SIZE]) {
+    for (int i = 0; i < SIZE; i += 3) {
+        for (int j = 0; j < 3; j++) {
+            for (int k = 0; k < 3; k++) {
+                int num;
+                do {
+                    num = rand() % 9 + 1;
+                } while (!isSafe(grid, i + j, i + k, num));
+                grid[i + j][i + k] = num;
+            }
+        }
+    }
+}
+
+void fillRemaining(int grid[SIZE][SIZE], int row, int col) {
+    if (col >= SIZE && row < SIZE - 1) {
+        row = row + 1;
+        col = 0;
+    }
+    if (row >= SIZE && col >= SIZE) {
+        return;
+    }
+
+    if (row < 3) {
+        if (col < 3) {
+            col = 3;
+        }
+    } else if (row < SIZE - 3) {
+        if (col == (int)(row / 3) * 3) {
+            col = col + 3;
+        }
+    } else {
+        if (col == SIZE - 3) {
+            row = row + 1;
+            col = 0;
+            if (row >= SIZE) {
+                return;
+            }
+        }
+    }
+
+    for (int num = 1; num <= SIZE; num++) {
+        if (isSafe(grid, row, col, num)) {
+            grid[row][col] = num;
+            fillRemaining(grid, row, col + 1);
+            grid[row][col] = UNASSIGNED;
+        }
+    }
+}
+
+void removeKDigits(int grid[SIZE][SIZE], int k) {
+    while (k != 0) {
+        int cellId = rand() % (SIZE * SIZE);
+        int row = cellId / SIZE;
+        int col = cellId % SIZE;
+        if (grid[row][col] != UNASSIGNED) {
+            grid[row][col] = UNASSIGNED;
+            k--;
+        }
+    }
+}
+
+void generateSudoku(int grid[SIZE][SIZE], int k) {
+    fillDiagonal(grid);
+    fillRemaining(grid, 0, 3);
+    removeKDigits(grid, k);
+}
